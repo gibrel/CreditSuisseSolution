@@ -127,7 +127,7 @@
     <comment>Formato de data utilizado.</comment>
   </data>
   <data name="EXPECTED_TRADE_FORMAT" xml:space="preserve">
-    <value>Valor_Transação    Setor_Cliente    MM/DD/AAAA</value>
+    <value>Valor_Transação    Setor_Cliente    MM/DD/AAAA    Exposto_Politicamente</value>
     <comment>Formato esperado para transação.</comment>
   </data>
   <data name="INFORM_NUMBER_TRANSACTIONS" xml:space="preserve">

@@ -127,7 +127,7 @@
     <comment>Date format used.</comment>
   </data>
   <data name="EXPECTED_TRADE_FORMAT" xml:space="preserve">
-    <value>Transaction_Value    Client_Sector    MM/DD/YYYY</value>
+    <value>Transaction_Value    Client_Sector    MM/DD/YYYY    Politically_Exposed</value>
     <comment>Expected transaction format.</comment>
   </data>
   <data name="INFORM_NUMBER_TRANSACTIONS" xml:space="preserve">
