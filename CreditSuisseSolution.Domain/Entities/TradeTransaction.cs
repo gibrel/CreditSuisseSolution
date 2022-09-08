@@ -11,14 +11,14 @@ namespace CreditSuisseSolution.Domain.Entities
 
         public DateTime NextPaymentDate { get; private set; }
 
-        //public bool IsPoliticallyExposed { get; private set; }
+        public bool IsPoliticallyExposed { get; private set; }
 
-        public TradeTransaction(double value, ClientSector clientSector, DateTime nextPaymentDate)
-        //public TradeTransaction(double value, ClientSector clientSector, DateTime nextPaymentDate, bool isPoliricallyExposed)
+        public TradeTransaction(double value, ClientSector clientSector, DateTime nextPaymentDate, bool isPoliricallyExposed)
         {
             Value = value;
             ClientSector = clientSector.Name;
             NextPaymentDate = nextPaymentDate;
+            IsPoliticallyExposed = isPoliricallyExposed;
         }
     }
 }
