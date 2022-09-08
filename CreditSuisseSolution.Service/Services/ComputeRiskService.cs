@@ -30,27 +30,26 @@ namespace CreditSuisseSolution.Service.Services
         }
 
         public bool ImportTrade(List<string> tradeInfo) {
-            if(tradeInfo == null || tradeInfo?.Count < 3) return false;
+            if(tradeInfo == null || tradeInfo?.Count < 4) return false;
 
             string ti_value = tradeInfo?[0] ?? "",
                    ti_ClientSector = tradeInfo?[1] ?? "",
-                   ti_nextPaymentDate = tradeInfo?[2] ?? "";
-                   //ti_isPoliticallyExposed = tradeInfo?[3].ToUpperInvariant() ?? "";
+                   ti_nextPaymentDate = tradeInfo?[2] ?? "",
+                   ti_isPoliticallyExposed = tradeInfo?[3].ToUpperInvariant() ?? "";
 
             var isValidValue = double.TryParse(ti_value, out double tradeValue);
             var tradeClientSector = Enumeration.GetByName<ClientSector>(ti_ClientSector);
             var isValidNextPaymentDate = DateTime.TryParseExact(ti_nextPaymentDate, "MM/dd/yyyy",
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime nextPaymentDate);
-            //var isValidPoliticallyExposed = string.Equals(ti_isPoliticallyExposed.ToUpperInvariant(), "YES") || string.Equals(ti_isPoliticallyExposed.ToUpperInvariant(), "NO");
+            (var isValidPoliticallyExposed, var isPoliticallyExposed) = ConvertStringToBool(ti_isPoliticallyExposed);
 
             if (isValidValue 
                 && tradeClientSector.ToString().Equals(ti_ClientSector)
                 && isValidNextPaymentDate
-                //&& isPoliticallyExposed
+                && isValidPoliticallyExposed
                 )
             {
-                Trades.Add(new TradeTransaction(tradeValue, tradeClientSector, nextPaymentDate));
-                //Trades.Add(new TradeTransaction(tradeValue, tradeClientSector, nextPaymentDate, ti_isPoliticallyExposed));
+                Trades.Add(new TradeTransaction(tradeValue, tradeClientSector, nextPaymentDate, isPoliticallyExposed));
                 return true;
             }
 
@@ -68,7 +67,7 @@ namespace CreditSuisseSolution.Service.Services
                 if (IsExpiredTrade(trade)) tradeCategories.Add(TradeCategory.EXPIRED); //trades with 30 days of expired
                 if (IsHighRiskTrade(trade)) tradeCategories.Add(TradeCategory.HIGHRISK); //value over 1M of private client
                 if (IsMediumRiskTrade(trade)) tradeCategories.Add(TradeCategory.MEDIUMRISK); //value over 1M of private client
-                //if (IsExpiredTrade(trade)) tradeCategories.Add(TradeCategory.PEP); //politically exposed client
+                if (IsPepTrade(trade)) tradeCategories.Add(TradeCategory.PEP); //politically exposed client
 
                 if (tradeCategories.Count == 0) tradeCategories.Add(TradeCategory.NONE); //no other category
 
@@ -103,9 +102,18 @@ namespace CreditSuisseSolution.Service.Services
             return false;
         }
 
-        //private bool IsPepTrade(ITrade trade)
-        //{
-        //    return trade.IsPoliticallyExposed;
-        //}
+        private bool IsPepTrade(ITrade trade)
+        {
+            return trade.IsPoliticallyExposed;
+        }
+
+        private (bool success, bool converted) ConvertStringToBool (string inputString)
+        {
+            if (string.Equals(inputString.ToUpperInvariant(), "YES"))
+                return (true, true);
+            if (string.Equals(inputString.ToUpperInvariant(), "NO"))
+                return (true, false);
+            return (false, false);
+        }
     }
 }
