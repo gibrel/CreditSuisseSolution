@@ -107,5 +107,14 @@ namespace CreditSuisseSolution.Service.Services
         //{
         //    return trade.IsPoliticallyExposed;
         //}
+
+        private (bool success, bool converted) ConvertStringToBool (string inputString)
+        {
+            if (string.Equals(inputString.ToUpperInvariant(), "YES"))
+                return (true, true);
+            if (string.Equals(inputString.ToUpperInvariant(), "NO"))
+                return (true, false);
+            return (false, false);
+        }
     }
 }
